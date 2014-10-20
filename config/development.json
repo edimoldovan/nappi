@@ -1,0 +1,87 @@
+{
+  "app": {
+    "port": 3000,
+    "domain": "node.nappi.com",
+    "folder": "/Users/edimoldovan/www/nappi"
+  },
+  "session": {
+    "cookieName": "user",
+    "secret": "Us3r53sSion",
+    "duration": 86400000,
+    "cookie": {
+      "path": "/",
+      "ephemeral": false,
+      "httpOnly": true
+    }
+  },
+  "mongoDb": {
+    "database": "nappi-localhost",
+    "connectString": "mongodb://localhost:27017/nappi-localhost",
+    "indexes": []
+  },
+  "morgan": {
+    "immediate": true,
+    "format": "dev"
+  },
+  "urlencoded": {
+    "extended": true,
+    "limit": "50mb"
+  },
+  "json": {
+    "limit": "50mb"
+  },
+  "static": [
+    "/static",
+    "/minified"
+  ],
+  "routes": {
+    "src": "/application/routes"
+  },
+  "api": {
+    "rest": {
+      "baseURL": "/rest"
+    }
+  },
+  "public": {
+    "title": "",
+    "javascripts": [
+      "/static/javascripts/default.js"
+    ],
+    "stylesheets": [
+      "/static/stylesheets/default.css"
+    ],
+    "layouts": [
+      {
+        "url": "index",
+        "templates": [
+          {
+            "name": "template",
+            "controller": "",
+            "type": "include"
+          }
+        ]
+      }
+    ]
+  },
+  "private": {
+    "title": "gocard.info",
+    "javascripts": [
+      "/static/javascripts/default.js"
+    ],
+    "stylesheets": [
+      "/static/stylesheets/default.css"
+    ],
+    "layouts": [
+      {
+        "url": "index",
+        "templates": [
+          {
+            "name": "template",
+            "controller": "",
+            "type": "include"
+          }
+        ]
+      }
+    ]
+  }
+}
