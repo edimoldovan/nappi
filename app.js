@@ -6,10 +6,8 @@ var env = process.env.NODE_ENV || "development",
 
   mongo = require("mongodb"),
   MongoClient = mongo.MongoClient,
-
   express = require("express"),
   sessions = require("client-sessions"),
-  config = require("application/services/config"),
   morgan = require("morgan"),
   bcrypt = require("bcrypt-nodejs"),
   bodyParser = require("body-parser"),
@@ -17,10 +15,10 @@ var env = process.env.NODE_ENV || "development",
   sassMiddleware = require("node-sass-middleware"),
   minify = require("express-minify"),
 
-  documents = require("application/models/documents") (),
+  config = require("_/services/config"),
+  documents = require("_/models/documents") (),
 
-  app = express(),
-  basedir = __dirname + "/config";
+  app = express();
 
 MongoClient.connect(config.get("mongoDb:connectString"), function(error, db) {
   if (error) {
@@ -49,7 +47,7 @@ MongoClient.connect(config.get("mongoDb:connectString"), function(error, db) {
 
 app.set("view engine", "handlebars");
 app.engine("handlebars", consolidate.handlebars);
-app.set("views", __dirname + "/application/");
+app.set("views", __dirname + "/lib/");
 
 if (env === "development") {
 
@@ -87,7 +85,7 @@ config.get("static").forEach(function(folder) {
 /*app.use(bodyParser.json(config.get("json")));
 app.use(bodyParser.urlencoded(config.get("urlencoded")));*/
 
-require(__dirname + config.get("routes:src")) (app);
+require(config.get("routes:src")) (app);
 
 try {
   app.listen(config.get("app:port"));

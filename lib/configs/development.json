@@ -1,8 +1,8 @@
 {
   "app": {
     "port": 3000,
-    "domain": "nappi.com",
-    "folder": "/var/www/nappi"
+    "domain": "node.nappi.com",
+    "folder": "/Users/edimoldovan/www/nappi"
   },
   "session": {
     "cookieName": "user",
@@ -35,7 +35,7 @@
     "/minified"
   ],
   "routes": {
-    "src": "/application/routes"
+    "src": "_/routes"
   },
   "api": {
     "rest": {
@@ -55,7 +55,7 @@
         "url": "index",
         "templates": [
           {
-            "name": "template",
+            "name": "index",
             "controller": "",
             "type": "include"
           }
