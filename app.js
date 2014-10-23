@@ -14,7 +14,7 @@ var env = process.env.NODE_ENV || "development",
   bcrypt = require("bcrypt-nodejs"),
   bodyParser = require("body-parser"),
   consolidate = require("consolidate"),
-  sass = require("node-sass"),
+  sassMiddleware = require("node-sass-middleware"),
   minify = require("express-minify"),
 
   documents = require("application/models/documents") (),
@@ -58,7 +58,8 @@ if (env === "development") {
     })
   );
 
-  app.use(sass.middleware({
+  app.use(
+    sassMiddleware({
       src: __dirname,
       dest: __dirname,
       outputStyle: "compressed",
@@ -83,8 +84,8 @@ config.get("static").forEach(function(folder) {
   app.use(folder, express["static"](__dirname + folder));
 });
 
-app.use(bodyParser.json(config.get("json")));
-app.use(bodyParser.urlencoded(config.get("urlencoded")));
+/*app.use(bodyParser.json(config.get("json")));
+app.use(bodyParser.urlencoded(config.get("urlencoded")));*/
 
 require(__dirname + config.get("routes:src")) (app);
 

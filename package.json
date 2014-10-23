@@ -12,7 +12,7 @@
     "consolidate": "latest",
     "handlebars": "latest",
     "mongodb": "latest",
-    "node-sass": "latest",
+    "node-sass-middleware": "latest",
     "express-minify": "latest",
     "shelljs": "latest",
     "base64url": "latest",
