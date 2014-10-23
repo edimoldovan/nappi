@@ -31,11 +31,24 @@
     "limit": "50mb"
   },
   "static": [
-    "/static",
+    "/public",
     "/minified"
   ],
   "routes": {
     "src": "_/routes"
+  },
+  "namespaces" : {
+    "users": {
+      "singular": "user",
+      "plural": "users",
+      "controller": {
+        "create": false,
+        "update": false,
+        "findOne": false,
+        "findAll": false,
+        "delete": false
+      }
+    }
   },
   "api": {
     "rest": {
@@ -45,10 +58,10 @@
   "public": {
     "title": "",
     "javascripts": [
-      "/static/javascripts/default.js"
+      "/public/javascripts/default.js"
     ],
     "stylesheets": [
-      "/static/stylesheets/default.css"
+      "/public/stylesheets/default.css"
     ],
     "layouts": [
       {

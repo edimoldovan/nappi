@@ -82,8 +82,8 @@ config.get("static").forEach(function(folder) {
   app.use(folder, express["static"](__dirname + folder));
 });
 
-/*app.use(bodyParser.json(config.get("json")));
-app.use(bodyParser.urlencoded(config.get("urlencoded")));*/
+app.use(bodyParser.json(config.get("json")));
+app.use(bodyParser.urlencoded(config.get("urlencoded")));
 
 require(config.get("routes:src")) (app);
 
