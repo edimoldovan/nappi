@@ -55,28 +55,7 @@
         "url": "index",
         "templates": [
           {
-            "name": "template",
-            "controller": "",
-            "type": "include"
-          }
-        ]
-      }
-    ]
-  },
-  "private": {
-    "title": "gocard.info",
-    "javascripts": [
-      "/static/javascripts/default.js"
-    ],
-    "stylesheets": [
-      "/static/stylesheets/default.css"
-    ],
-    "layouts": [
-      {
-        "url": "index",
-        "templates": [
-          {
-            "name": "template",
+            "name": "index",
             "controller": "",
             "type": "include"
           }

@@ -20,8 +20,7 @@ controller.render = function(req, res) {
     currentUser = {},
     url = req.url.replace(/^\/|\/$/g, ""),
     urlArray = url.split("/"),
-    appType = (urlArray[0] === "_private") ? "private" : "public",
-    settings = config.get(appType);
+    settings = config.get("public");
 
   if (url === "") {
     url = "index";
@@ -37,7 +36,7 @@ controller.render = function(req, res) {
   });
 
   if (env === "development") {
-    output += handlebars.compile(fs.readFileSync(__dirname + "/../views/" + appType + "/site-header.hbs", "utf8"))({
+    output += handlebars.compile(fs.readFileSync(__dirname + "/../views//site-header.hbs", "utf8"))({
       title: settings.title,
       domain: settings.domain,
       api: config.api,
@@ -45,7 +44,7 @@ controller.render = function(req, res) {
       user: currentUser
     });
   } else {
-    output += handlebars.compile(fs.readFileSync(__dirname + "/../views/" + appType + "/site-header.hbs", "utf8"))({
+    output += handlebars.compile(fs.readFileSync(__dirname + "/../views/site-header.hbs", "utf8"))({
       title: settings.title,
       domain: settings.domain,
       api: config.api,
@@ -58,9 +57,9 @@ controller.render = function(req, res) {
     if (layout.url === url) {
       layout.templates.forEach(function(template) {
         if (template.type = "include") {
-          output += fs.readFileSync(__dirname + "/../views/" + appType + "/" + template.name + ".hbs", "utf8");
+          output += fs.readFileSync(__dirname + "/../views/" + template.name + ".hbs", "utf8");
         } else {
-          output += handlebars.compile(fs.readFileSync(__dirname + "/../views/" + appType + "/" + template.name + ".hbs", "utf8"))({
+          output += handlebars.compile(fs.readFileSync(__dirname + "/../views/" + template.name + ".hbs", "utf8"))({
             user: currentUser,
             domain: settings.domain
           });
@@ -70,13 +69,13 @@ controller.render = function(req, res) {
   })[0];
 
   if (env === "development") {
-    output += handlebars.compile(fs.readFileSync(__dirname + "/../views/" + appType + "/site-footer.hbs", "utf8"))({
+    output += handlebars.compile(fs.readFileSync(__dirname + "/../views/site-footer.hbs", "utf8"))({
       javascripts: settings.javascripts,
       domain: settings.domain,
       user: currentUser
     });
   } else {
-    output += handlebars.compile(fs.readFileSync(__dirname + "/../views/" + appType + "/site-footer.hbs", "utf8"))({
+    output += handlebars.compile(fs.readFileSync(__dirname + "/../views/site-footer.hbs", "utf8"))({
       javascripts: settings.javascripts,
       domain: settings.domain,
       user: currentUser
