@@ -4,6 +4,8 @@ pids
 *.pid
 *.seed
 
+.idea
+
 lib-cov
 coverage
 .grunt

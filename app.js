@@ -41,7 +41,6 @@ MongoClient.connect(config.get("mongoDb:connectString"), function(error, db) {
         }
       });
     }
-    
   });
 });
 
