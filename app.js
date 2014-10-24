@@ -9,14 +9,11 @@ var env = process.env.NODE_ENV || "development",
   express = require("express"),
   sessions = require("client-sessions"),
   morgan = require("morgan"),
-  bcrypt = require("bcrypt-nodejs"),
   bodyParser = require("body-parser"),
   consolidate = require("consolidate"),
   sassMiddleware = require("node-sass-middleware"),
-  minify = require("express-minify"),
 
   config = require("_/services/config"),
-  documents = require("_/models/documents") (),
 
   app = express();
 
