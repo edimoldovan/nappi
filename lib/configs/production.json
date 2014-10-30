@@ -37,22 +37,22 @@
   "routes": {
     "src": "_/routes"
   },
-  "namespaces" : {
-    "users": {
-      "singular": "user",
-      "plural": "users",
-      "controller": {
-        "create": false,
-        "update": false,
-        "findOne": false,
-        "findAll": false,
-        "delete": false
-      }
-    }
-  },
   "api": {
     "rest": {
-      "baseURL": "/rest"
+      "baseURL": "/rest",
+      "namespaces": {
+        "users": {
+          "singular": "user",
+          "plural": "users",
+          "controller": {
+            "create": false,
+            "update": false,
+            "findOne": false,
+            "findAll": false,
+            "delete": false
+          }
+        }
+      }
     }
   },
   "public": {

@@ -37,22 +37,51 @@
   "routes": {
     "src": "_/routes"
   },
-  "namespaces" : {
-    "users": {
-      "singular": "user",
-      "plural": "users",
-      "controller": {
-        "create": false,
-        "update": false,
-        "findOne": false,
-        "findAll": false,
-        "delete": false
-      }
-    }
-  },
   "api": {
     "rest": {
-      "baseURL": "/rest"
+      "baseURL": "/rest",
+      "namespaces": {
+        "users": {
+          "singular": "user",
+          "plural": "users",
+          "create": {
+            "controller": false,
+            "auth": false
+          },
+          "update": {
+            "controller": false,
+            "auth": false
+          },
+          "findOne": {
+            "controller": false,
+            "auth": false
+          },
+          "findAll": {
+            "controller": false,
+            "auth": false
+          },
+          "delete": {
+            "controller": false,
+            "auth": false
+          }
+        },
+        "sessions": {
+          "singular": "session",
+          "plural": "sessions",
+          "create": {
+            "controller": true,
+            "auth": false
+          },
+          "findOne": {
+            "controller": true,
+            "auth": false
+          },
+          "delete": {
+            "controller": true,
+            "auth": false
+          }
+        }
+      }
     }
   },
   "public": {
