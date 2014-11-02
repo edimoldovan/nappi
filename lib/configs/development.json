@@ -45,23 +45,23 @@
           "singular": "user",
           "plural": "users",
           "create": {
-            "controller": false,
+            "controller": "",
             "auth": false
           },
           "update": {
-            "controller": false,
+            "controller": "",
             "auth": false
           },
           "findOne": {
-            "controller": false,
+            "controller": "",
             "auth": false
           },
           "findAll": {
-            "controller": false,
+            "controller": "",
             "auth": false
           },
           "delete": {
-            "controller": false,
+            "controller": "",
             "auth": false
           }
         },
@@ -69,15 +69,15 @@
           "singular": "session",
           "plural": "sessions",
           "create": {
-            "controller": true,
+            "controller": "",
             "auth": false
           },
           "findOne": {
-            "controller": true,
+            "controller": "",
             "auth": false
           },
           "delete": {
-            "controller": true,
+            "controller": "",
             "auth": false
           }
         }
