@@ -21,7 +21,7 @@
   },
   "morgan": {
     "immediate": true,
-    "format": "dev"
+    "format": "common"
   },
   "urlencoded": {
     "extended": true,
@@ -45,23 +45,23 @@
           "singular": "user",
           "plural": "users",
           "create": {
-            "controller": "",
+            "controller": false,
             "auth": false
           },
           "update": {
-            "controller": "",
+            "controller": false,
             "auth": false
           },
           "findOne": {
-            "controller": "",
+            "controller": false,
             "auth": false
           },
           "findAll": {
-            "controller": "",
+            "controller": false,
             "auth": false
           },
           "delete": {
-            "controller": "",
+            "controller": false,
             "auth": false
           }
         },
@@ -69,40 +69,19 @@
           "singular": "session",
           "plural": "sessions",
           "create": {
-            "controller": "",
+            "controller": false,
             "auth": false
           },
           "findOne": {
-            "controller": "",
+            "controller": false,
             "auth": false
           },
           "delete": {
-            "controller": "",
+            "controller": false,
             "auth": false
           }
         }
       }
     }
-  },
-  "public": {
-    "title": "",
-    "javascripts": [
-      "/public/javascripts/default.js"
-    ],
-    "stylesheets": [
-      "/public/stylesheets/default.css"
-    ],
-    "layouts": [
-      {
-        "url": "index",
-        "templates": [
-          {
-            "name": "template",
-            "controller": "",
-            "type": "include"
-          }
-        ]
-      }
-    ]
   }
 }
