@@ -11,7 +11,6 @@ var env = process.env.NODE_ENV || "development",
   morgan = require("morgan"),
   bodyParser = require("body-parser"),
   consolidate = require("consolidate"),
-  sassMiddleware = require("node-sass-middleware"),
 
   config = require("_/services/config"),
 
@@ -41,23 +40,10 @@ MongoClient.connect(config.get("mongoDb:connectString"), function(error, db) {
   });
 });
 
-app.set("view engine", "handlebars");
-app.engine("handlebars", consolidate.handlebars);
-app.set("views", __dirname + "/lib/");
-
 if (env === "development") {
 
   app.use(morgan(config.get("morgan:format"), {
       immediate: true
-    })
-  );
-
-  app.use(
-    sassMiddleware({
-      src: __dirname,
-      dest: __dirname,
-      outputStyle: "compressed",
-      debug: true
     })
   );
 
@@ -73,10 +59,6 @@ app.use(sessions({
     httpOnly: config.get("session:cookie:httpOnly")
   }
 }));
-
-config.get("static").forEach(function(folder) {
-  app.use(folder, express["static"](__dirname + folder));
-});
 
 app.use(bodyParser.json(config.get("json")));
 app.use(bodyParser.urlencoded(config.get("urlencoded")));
