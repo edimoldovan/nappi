@@ -34,48 +34,46 @@
     "src": "_/routes"
   },
   "api": {
-    "rest": {
-      "baseURL": "/rest",
-      "namespaces": {
-        "users": {
-          "singular": "user",
-          "plural": "users",
-          "create": {
-            "controller": false,
-            "auth": false
-          },
-          "update": {
-            "controller": false,
-            "auth": false
-          },
-          "findOne": {
-            "controller": false,
-            "auth": false
-          },
-          "findAll": {
-            "controller": false,
-            "auth": false
-          },
-          "delete": {
-            "controller": false,
-            "auth": false
-          }
+    "baseURL": "/api",
+    "namespaces": {
+      "users": {
+        "singular": "user",
+        "plural": "users",
+        "create": {
+          "controller": false,
+          "auth": false
         },
-        "sessions": {
-          "singular": "session",
-          "plural": "sessions",
-          "create": {
-            "controller": false,
-            "auth": false
-          },
-          "findOne": {
-            "controller": false,
-            "auth": false
-          },
-          "delete": {
-            "controller": false,
-            "auth": false
-          }
+        "update": {
+          "controller": false,
+          "auth": false
+        },
+        "findOne": {
+          "controller": false,
+          "auth": false
+        },
+        "findAll": {
+          "controller": false,
+          "auth": false
+        },
+        "delete": {
+          "controller": false,
+          "auth": false
+        }
+      },
+      "sessions": {
+        "singular": "session",
+        "plural": "sessions",
+        "create": {
+          "controller": false,
+          "auth": false
+        },
+        "findOne": {
+          "controller": false,
+          "auth": false
+        },
+        "delete": {
+          "controller": false,
+          "auth": false
         }
       }
     }

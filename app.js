@@ -1,73 +1,83 @@
-/*jslint browser:true */
-/*jslint nomen:true */
-/*global process,EventEmitter,__dirname,require,$,console,cookie,alert,Ember,jQuery,FileReader,canvas,FB*/
-
 var env = process.env.NODE_ENV || "development",
+	http = require("http"),
+	baseApiUrl = "/api",
+	config = require("_/configs/" + env + ".json"),
+	database = require("_/models/mongo") ();
 
-  mongo = require("mongodb"),
-  MongoClient = mongo.MongoClient,
-  express = require("express"),
-  sessions = require("client-sessions"),
-  morgan = require("morgan"),
-  bodyParser = require("body-parser"),
-  consolidate = require("consolidate"),
+http.createServer(function (req, res) {
+	var url = req.url.replace(config.api.baseURL, "").replace(/^\/|\/$/g, ""),
+			splitUrl = url.split("/"),
+			namespace = splitUrl[0],
+			id = splitUrl[1],
+			method = req.method,
+			headers = req.headers,
+			output = {},
+			namespaceConfig;
 
-  config = require("_/services/config"),
+	console.log(new Date().toString() + " [" + method + "] [" + env + "] " + req.url);
 
-  app = express();
+	if (!config.api.namespaces[namespace]) {
+		res.writeHead(404, {"application/json": "charset=utf-8"});
+		res.end();
+	}
 
-MongoClient.connect(config.get("mongoDb:connectString"), function(error, db) {
-  if (error) {
-    throw error;
-  }
+	res.writeHead(200, {
+		"Content-Type": "application/json; charset=utf-8"
+	});
 
-  config.get("mongoDb:indexes").forEach(function(index) {
-    collection = db.collection(index.collection);
+	namespaceConfig = config.api.namespaces[namespace];
 
-    if (index.expireAfterSeconds) {
-      collection.ensureIndex(index.index, {expireAfterSeconds: index.expireAfterSeconds},function(ensureError) {
-        if (ensureError) {
-          throw ensureError;
-        }
+	if (method === "GET") {
+		if (id) {
+			if (namespaceConfig.findOne.controller) {
+				console.log("controller");
+			} else {
+				database.findOne(namespace, id, function(results) {
+					output[namespaceConfig.plural] = results;
+					res.end(JSON.stringify(output));
+				});
+			}
+		} else {
+			if (namespaceConfig.findAll.controller) {
+				console.log("controller");
+			} else {
+				database.findAll(namespace, {}, 100000, function(results) {
+					output[namespaceConfig.plural] = results;
+					res.end(JSON.stringify(output));
+				});
+			}
+		}
+	} else if (method === "POST") {
+		if (namespaceConfig.create.controller === true) {
+      controller = require(__dirname + "/controllers/" + namespaces[req.params.namespace].singular) (app);
+      controller.create(req, res, function(results) {
+        output[namespaces[req.params.namespace].plural] = results;
+        res.end(JSON.stringify(output));
       });
-    } else {
-      collection.ensureIndex(index.index, function(ensureError) {
-        if (ensureError) {
-          throw ensureError;
-        }
+    } else if (create.controller === false) {
+      database.create(namespace, req.body[namespaceConfig.singular], function(results) {
+        output[namespaceConfig.plural] = results;
+        res.end(JSON.stringify(output));
       });
     }
-  });
-});
+	} else if (method === "PUT") {
+		if (namespaceConfig.update.controller === true) {
+      res.end("Unused");
+    } else if (update.controller === false) {
+      database.update(namespace, id, req.body[namespaces[req.params.namespace].singular], function(results) {
+        output[namespaceConfig.plural] = results;
+        res.end(JSON.stringify(output));
+      });
+    }
+	} else if (method === "DELETE") {
+		if (namespaceConfig.delete.controller === true) {
+      res.end("Unused");
+    } else if (del.controller === false) {
+      database.delete(namespace, req.params.id, function(results) {
+        output[namespaceConfig.plural] = results;
+        res.end(JSON.stringify(output));
+      });
+    }
+	}
 
-if (env === "development") {
-
-  app.use(morgan(config.get("morgan:format"), {
-      immediate: true
-    })
-  );
-
-}
-
-app.use(sessions({
-  cookieName: config.get("session:cookieName"),
-  secret: config.get("session:secret"),
-  duration: config.get("session:duration"),
-  cookie: {
-    path: config.get("session:cookie:path"),
-    ephemeral: config.get("session:cookie:ephemeral"),
-    httpOnly: config.get("session:cookie:httpOnly")
-  }
-}));
-
-app.use(bodyParser.json(config.get("json")));
-app.use(bodyParser.urlencoded(config.get("urlencoded")));
-
-require(config.get("routes:src")) (app);
-
-try {
-  app.listen(config.get("app:port"));
-  console.log("App listening on port " + config.get("app:port"));
-} catch(e) {
-  console.log(e);
-}
+}).listen(3000);

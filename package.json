@@ -1,22 +1,6 @@
 {
   "name": "emask",
   "dependencies": {
-    "express": "latest",
-    "connect": "latest",
-    "client-sessions": "latest",
-    "nconf": "latest",
-    "body-parser": "latest",
-    "cookie-parser": "latest",
-    "morgan": "latest",
-    "bcrypt-nodejs": "latest",
-    "consolidate": "latest",
-    "handlebars": "latest",
-    "mongodb": "latest",
-    "node-sass-middleware": "latest",
-    "express-minify": "latest",
-    "shelljs": "latest",
-    "base64url": "latest",
-    "btoa": "latest",
-    "async": "latest"
+    "mongodb": "latest"
   }
 }
