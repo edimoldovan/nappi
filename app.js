@@ -4,6 +4,12 @@ var env = process.env.NODE_ENV || "development",
 	config = require("_/configs/" + env + ".json"),
 	database = require("_/models/mongo") ();
 
+
+function write404(res) {
+	res.writeHead(404, {"Content-Type": "application/json; charset=utf-8"});
+	res.end();
+}
+
 http.createServer(function (req, res) {
 	var url = req.url.replace(config.api.baseURL, "").replace(/^\/|\/$/g, ""),
 			splitUrl = url.split("/"),
@@ -17,19 +23,17 @@ http.createServer(function (req, res) {
 	console.log(new Date().toString() + " [" + method + "] [" + env + "] " + req.url);
 
 	if (!config.api.namespaces[namespace]) {
-		res.writeHead(404, {"application/json": "charset=utf-8"});
+		res.writeHead(404, {"Content-Type": "application/json; charset=utf-8"});
 		res.end();
 	}
-
-	res.writeHead(200, {
-		"Content-Type": "application/json; charset=utf-8"
-	});
 
 	namespaceConfig = config.api.namespaces[namespace];
 
 	if (method === "GET") {
 		if (id) {
-			if (namespaceConfig.findOne.controller) {
+			if (!namespaceConfig.findOne) {
+				write404(res);
+			} else if (namespaceConfig.findOne.controller) {
 				console.log("controller");
 			} else {
 				database.findOne(namespace, id, function(results) {
@@ -38,8 +42,11 @@ http.createServer(function (req, res) {
 				});
 			}
 		} else {
-			if (namespaceConfig.findAll.controller) {
+			if (!namespaceConfig.findAll) {
+				write404(res);
+			} else if (namespaceConfig.findAll.controller) {
 				console.log("controller");
+				res.end("Unused");
 			} else {
 				database.findAll(namespace, {}, 100000, function(results) {
 					output[namespaceConfig.plural] = results;
@@ -48,8 +55,10 @@ http.createServer(function (req, res) {
 			}
 		}
 	} else if (method === "POST") {
-		if (namespaceConfig.create.controller === true) {
-      controller = require(__dirname + "/controllers/" + namespaces[req.params.namespace].singular) (app);
+		if (!namespaceConfig.create) {
+			write404(res);
+		} else if (namespaceConfig.create.controller === true) {
+      controller = require(__dirname + "/controllers/" + namespaceConfig.singular) (app);
       controller.create(req, res, function(results) {
         output[namespaces[req.params.namespace].plural] = results;
         res.end(JSON.stringify(output));
@@ -61,16 +70,20 @@ http.createServer(function (req, res) {
       });
     }
 	} else if (method === "PUT") {
-		if (namespaceConfig.update.controller === true) {
+		if (!namespaceConfig.update) {
+			write404(res);
+		} else if (namespaceConfig.update.controller === true) {
       res.end("Unused");
     } else if (update.controller === false) {
-      database.update(namespace, id, req.body[namespaces[req.params.namespace].singular], function(results) {
+      database.update(namespace, id, req.body[namespaceConfig.singular], function(results) {
         output[namespaceConfig.plural] = results;
         res.end(JSON.stringify(output));
       });
     }
 	} else if (method === "DELETE") {
-		if (namespaceConfig.delete.controller === true) {
+		if (!namespaceConfig.delete) {
+			write404(res);
+		} else if (namespaceConfig.delete.controller === true) {
       res.end("Unused");
     } else if (del.controller === false) {
       database.delete(namespace, req.params.id, function(results) {
