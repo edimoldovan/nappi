@@ -1,6 +1,5 @@
 var env = process.env.NODE_ENV || "development",
 	http = require("http"),
-	baseApiUrl = "/api",
 	config = require("_/configs/" + env + ".json"),
 	database = require("_/models/mongo") ();
 
