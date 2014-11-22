@@ -1,95 +1,100 @@
+// curl -X POST -H "Content-Type: application/json; charset=utf-8" "localhost:3000/users" -d "{'user':{'email':'pistike@pistike.hu'}}"
+
+/*jslint browser:true */
+/*jslint nomen:true */
+/*global module, process,EventEmitter,__dirname,require,$,console,cookie,alert,Ember,jQuery,FileReader,canvas,FB*/
+
 var env = process.env.NODE_ENV || "development",
 	http = require("http"),
+	url = require("url"),
 	config = require("_/configs/" + env + ".json"),
 	database = require("_/models/mongo") ();
 
 
 function write404(res) {
+	"use strict";
 	res.writeHead(404, {"Content-Type": "application/json; charset=utf-8"});
 	res.end();
 }
 
 http.createServer(function (req, res) {
-	var url = req.url.replace(config.api.baseURL, "").replace(/^\/|\/$/g, ""),
-			splitUrl = url.split("/"),
+	"use strict";
+	var parsedUrl = url.parse(req.url, true),
+			splitUrl = parsedUrl.pathname.replace(/^\/|\/$/g, "").split("/"),
 			namespace = splitUrl[0],
 			id = splitUrl[1],
-			method = req.method,
-			headers = req.headers,
 			output = {},
-			namespaceConfig;
+			method = req.method.toLowerCase(),
+			namespaceConfig,
+			applyParams = [],
+			handler,
+			body = "";
 
 	console.log(new Date().toString() + " [" + method + "] [" + env + "] " + req.url);
 
-	if (!config.api.namespaces[namespace]) {
-		res.writeHead(404, {"Content-Type": "application/json; charset=utf-8"});
-		res.end();
+	function handleResults(results) {
+		output[namespaceConfig.plural] = results;
+		res.end(JSON.stringify(output));
+	}
+
+	if (!config.api.namespaces[namespace] || !namespace) {
+		write404(res);
 	}
 
 	namespaceConfig = config.api.namespaces[namespace];
 
-	if (method === "GET") {
-		if (id) {
-			if (!namespaceConfig.findOne) {
-				write404(res);
-			} else if (namespaceConfig.findOne.controller) {
-				console.log("controller");
-			} else {
-				database.findOne(namespace, id, function(results) {
-					output[namespaceConfig.plural] = results;
-					res.end(JSON.stringify(output));
-				});
-			}
-		} else {
-			if (!namespaceConfig.findAll) {
-				write404(res);
-			} else if (namespaceConfig.findAll.controller) {
-				console.log("controller");
-				res.end("Unused");
-			} else {
-				database.findAll(namespace, {}, 100000, function(results) {
-					output[namespaceConfig.plural] = results;
-					res.end(JSON.stringify(output));
-				});
-			}
-		}
-	} else if (method === "POST") {
-		if (!namespaceConfig.create) {
-			write404(res);
-		} else if (namespaceConfig.create.controller === true) {
-      controller = require(__dirname + "/controllers/" + namespaceConfig.singular) (app);
-      controller.create(req, res, function(results) {
-        output[namespaces[req.params.namespace].plural] = results;
-        res.end(JSON.stringify(output));
-      });
-    } else if (create.controller === false) {
-      database.create(namespace, req.body[namespaceConfig.singular], function(results) {
-        output[namespaceConfig.plural] = results;
-        res.end(JSON.stringify(output));
-      });
-    }
-	} else if (method === "PUT") {
-		if (!namespaceConfig.update) {
-			write404(res);
-		} else if (namespaceConfig.update.controller === true) {
-      res.end("Unused");
-    } else if (update.controller === false) {
-      database.update(namespace, id, req.body[namespaceConfig.singular], function(results) {
-        output[namespaceConfig.plural] = results;
-        res.end(JSON.stringify(output));
-      });
-    }
-	} else if (method === "DELETE") {
-		if (!namespaceConfig.delete) {
-			write404(res);
-		} else if (namespaceConfig.delete.controller === true) {
-      res.end("Unused");
-    } else if (del.controller === false) {
-      database.delete(namespace, req.params.id, function(results) {
-        output[namespaceConfig.plural] = results;
-        res.end(JSON.stringify(output));
-      });
-    }
+	if (!namespaceConfig[method]) {
+		write404(res);
 	}
 
+	applyParams.push(namespace);
+
+	req.on("data", function (chunk) {
+		body += chunk;
+	});
+	req.on("end", function () {
+
+		if (method === "get") {
+			handler = database;
+			if (id) {
+				method = "getOne";
+				applyParams.push(id);
+			} else {
+				applyParams.push({});
+				applyParams.push(100000);
+			}
+		} else if (method === "post") {
+			applyParams.push(JSON.parse(body)[namespaceConfig.singular]);
+		} else if (method === "put") {
+			applyParams.push(id);
+			applyParams.push(JSON.parse(body)[namespaceConfig.singular]);
+		} else if (method === "delete") {
+			applyParams.push(id);
+		}
+
+		if (namespaceConfig[method].controller) {
+			// handler = controller;
+			console.log("controller");
+		} else {
+			handler = database;
+		}
+
+		applyParams.push(handleResults);
+		handler[method].apply(this, applyParams);
+	});
+
 }).listen(3000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+

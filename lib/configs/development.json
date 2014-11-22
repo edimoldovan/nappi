@@ -4,51 +4,26 @@
     "domain": "node.nappi.com",
     "folder": "/Users/edimoldovan/www/nappi"
   },
-  "session": {
-    "cookieName": "user",
-    "secret": "Us3r53sSion",
-    "duration": 86400000,
-    "cookie": {
-      "path": "/",
-      "ephemeral": false,
-      "httpOnly": true
-    }
-  },
   "mongoDb": {
     "database": "nappi-localhost",
     "connectString": "mongodb://localhost:27017/nappi-localhost",
     "indexes": []
   },
-  "morgan": {
-    "immediate": true,
-    "format": "common"
-  },
-  "urlencoded": {
-    "extended": true,
-    "limit": "50mb"
-  },
-  "json": {
-    "limit": "50mb"
-  },
-  "routes": {
-    "src": "_/routes"
-  },
   "api": {
-    "baseURL": "/api",
     "namespaces": {
       "users": {
         "singular": "user",
         "plural": "users",
-        "create": {
+        "post": {
           "auth": false
         },
-        "update": {
+        "put": {
           "auth": false
         },
-        "findOne": {
+        "getOne": {
           "auth": false
         },
-        "findAll": {
+        "get": {
           "auth": false
         },
         "delete": {

@@ -1,5 +1,5 @@
 {
-  "name": "emask",
+  "name": "nappi",
   "dependencies": {
     "mongodb": "latest"
   }
