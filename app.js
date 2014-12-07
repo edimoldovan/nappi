@@ -10,6 +10,15 @@ var env = process.env.NODE_ENV || "development",
   config = require("_/configs/" + env + ".json"),
   database = require("_/models/mongo") ();
 
+function allowCORS(res) {
+  res.writeHead(200, 
+    {
+      "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+    }
+  );
+}
 
 function write404(res) {
   "use strict";
@@ -43,18 +52,21 @@ http.createServer(function (req, res) {
 
   namespaceConfig = config.api.namespaces[namespace];
 
-  if (!namespaceConfig[method]) {
+  if (!namespaceConfig[method] && method !== "options") {
     write404(res);
   }
 
   applyParams.push(namespace);
+  // enable CORS
+  allowCORS(res);
 
   req.on("data", function (chunk) {
     body += chunk;
   });
   req.on("end", function () {
-
-    if (method === "get") {
+    if (method === "options") {
+      res.end();
+    } else if (method === "get") {
       handler = database;
       if (id) {
         method = "getOne";
@@ -72,15 +84,17 @@ http.createServer(function (req, res) {
       applyParams.push(id);
     }
 
-    if (namespaceConfig[method].controller) {
-      // handler = controller;
-      console.log("controller");
-    } else {
-      handler = database;
-    }
+    if (method !== "options") {
+      if (namespaceConfig[method].controller) {
+        // handler = controller;
+        console.log("controller");
+      } else {
+        handler = database;
+      }
 
-    applyParams.push(handleResults);
-    handler[method].apply(this, applyParams);
+      applyParams.push(handleResults);
+      handler[method].apply(this, applyParams);
+    }
   });
 
 }).listen(3000);
