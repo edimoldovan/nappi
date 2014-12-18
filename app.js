@@ -47,7 +47,7 @@ http.createServer(function (req, res) {
   }
 
   if (!config.api.namespaces[namespace] || !namespace) {
-    write404(res);
+    return write404(res);
   }
 
   namespaceConfig = config.api.namespaces[namespace];
