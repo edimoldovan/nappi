@@ -10,10 +10,11 @@ var env = process.env.NODE_ENV || "development",
   config = require("_/configs/" + env + ".json"),
   database = require("_/models/mongo") ();
 
-function allowCORS(res) {
+function setHeaders(res) {
   res.writeHead(200, 
     {
       "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
     }
@@ -58,7 +59,7 @@ http.createServer(function (req, res) {
 
   applyParams.push(namespace);
   // enable CORS
-  allowCORS(res);
+  setHeaders(res);
 
   req.on("data", function (chunk) {
     body += chunk;
