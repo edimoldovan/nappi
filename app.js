@@ -89,6 +89,8 @@ http.createServer(function (req, res) {
       if (namespaceConfig[method].controller) {
         // handler = controller;
         console.log("controller");
+        applyParams.push(req);
+        applyParams.push(res);
       } else {
         handler = database;
       }
