@@ -33,11 +33,11 @@
       "sessions": {
         "singular": "session",
         "plural": "sessions",
-        "create": {
+        "post": {
           "controller": true,
           "auth": false
         },
-        "findOne": {
+        "getOne": {
           "controller": true,
           "auth": false
         },
